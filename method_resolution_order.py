@@ -1,8 +1,28 @@
+'''
+If we have the same method in different classes in the 
+inheritance chain, Python will execute the nearest one (nearest ancestor).
+This rule is called MRO - Method Resolution Order, which is 
+important when we have multi-level inheritance
+'''
+
+
+# SandWatch Class
+class SandWatch(object):
+
+    def __init__(self):
+        self.start_sand_watch()
+
+    def start_sand_watch(self):
+        print('Sand Watch started.')
+
+
 # Clock Class
-class Clock:
+class Clock(SandWatch):
     '''Simulates the clock'''
 
     def __init__(self, hours, minutes, seconds):
+        super().__init__()  # calling the SanndWatch.__init__() method
+
         self.__hours = hours
         self.__minutes = minutes
         self.__seconds = seconds
@@ -15,13 +35,9 @@ class Clock:
     def time(self):
         return f'{self.__hours}:{self.__minutes}:{self.__seconds}'
 
-
-# create clock object
-clock = Clock(0, 0, 0)
-print(f'Start Time: {clock.time()}')
-
-clock = Clock(13, 4, 22)
-print(f'End Time: {clock.time()}')
+    # method overloading /method overriding
+    def start_sand_watch(self):
+        print('Sand Watch started in Clock Class')
 
 
 # Calendar Class
@@ -40,15 +56,6 @@ class Calendar(object):
         return f'{self.__d}, {self.__m}, {self.__y}'
 
 
-# create a Calendar object
-calendar = Calendar(13, 4, 2023)
-print(calendar.date())
-
-# set calendar date
-calendar.set_calendar(13, 4, 2022)
-print(calendar.date())
-
-
 # create a ClockCalendar class which inherits from Clock and Calendar class
 class CalendarClock(Clock, Calendar):
     '''Keeps calendar anf clock together'''
@@ -61,3 +68,11 @@ class CalendarClock(Clock, Calendar):
 
 # create a CalendarClock object
 calendar_clock = CalendarClock(14, 4, 2023, 12, 4, 20)
+
+# MRO for CalendarClock
+# __mro__
+
+print(f'MRO for CalendarClock')
+# for m in CalendarClock.__mro__:
+for m in CalendarClock.mro():
+    print(m)
